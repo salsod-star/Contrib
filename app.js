@@ -7,6 +7,8 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
+const compression = require("compression");
+const cors = require("cors");
 
 const contributionRouter = require("./routes/contribRoutes");
 const contributorRouter = require("./routes/ContributorRoutes");
@@ -15,6 +17,9 @@ const groupRouter = require("./routes/groupRoutes");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
+
+app.use(cors());
+app.options("*", cors());
 
 // SECURITY HEADERS
 app.use(helmet());
@@ -46,6 +51,8 @@ app.use(xss());
 
 // Prevent parameter pollution
 app.use(hpp());
+
+app.use(compression());
 
 app.use("/api/v1/contributions", contributionRouter);
 app.use("/api/v1/contributors", contributorRouter);
